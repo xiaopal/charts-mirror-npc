@@ -59,7 +59,11 @@ git submodule foreach git pull origin master || {
 }
 
 export HELM_HOME=$PWD/target/.home && mkdir -p "$HELM_HOME" && \
-helm init --client-only || exit 1
+helm init --client-only && \
+helm repo add incubator "https://kubernetes-charts-incubator.storage.googleapis.com" || {
+    log "failed to init helm"
+    exit 1
+}
 
 #helm init --client-only --stable-repo-url "$SYNC_BUCKET_ACCESS/charts/stable" || exit 1
 # helm repo add "stable-origin" "https://kubernetes-charts.storage.googleapis.com" || {
